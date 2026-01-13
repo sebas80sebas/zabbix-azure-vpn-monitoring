@@ -353,9 +353,9 @@ The Zabbix template is provided in three formats: XML, JSON, and YAML. Choose th
 2. Navigate to **Configuration** → **Templates**
 3. Click **Import** in the top-right corner
 4. Click **Choose File** and select one of the template files:
-   - `zbx_export_templates.xml` (recommended for most versions)
-   - `zbx_export_templates.json`
-   - `zbx_export_templates.yaml`
+   - `zbx_vpn_template.xml` (recommended for most versions)
+   - `zbx_vpn_template.json`
+   - `zbx_vpn_template.yaml`
 5. Review the import options:
    - Check **Create new** for templates, groups, and items
    - Check **Update existing** if reimporting

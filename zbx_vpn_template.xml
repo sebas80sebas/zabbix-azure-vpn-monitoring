@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>7.0</version>
+    <template_groups>
+        <template_group>
+            <uuid>137f19e6e2dc4219b33553b812627bc2</uuid>
+            <name>Virtual machines</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>530e02caee184f48adb6aed7aa4d4624</uuid>
+            <template>Template Azure VPN</template>
+            <name>Template Azure VPN</name>
+            <groups>
+                <group>
+                    <name>Virtual machines</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>fbc8dbb9797f4116b92f93de6f947a83</uuid>
+                    <name>VPN Connection - Health Status</name>
+                    <type>DEPENDENT</type>
+                    <key>vpn.healthstatus</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>Overall health status: Connected, NotConnected, Degraded, Connecting, or Unknown</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.data.healthStatus</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>vpn_connection_monitor.py[&quot;{$AZ_SUBSCRIPTION}&quot;,&quot;{$AZ_RG}&quot;,&quot;{$AZ_VPN_CONNECTION}&quot;]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <uuid>188858da158a4c33ad8ee7bf3d65edc5</uuid>
+                            <expression>last(/Template Azure VPN/vpn.healthstatus)=&quot;Degraded&quot;</expression>
+                            <name>VPN Connection is Degraded</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <uuid>3b2fc7b357c54ba099502e600484ad73</uuid>
+                            <expression>last(/Template Azure VPN/vpn.healthstatus)=&quot;NotConnected&quot;</expression>
+                            <name>VPN Connection is Not Connected</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>8ac45ee0af2a4a3ba1513091863c5110</uuid>
+                    <name>VPN Connection - Raw Data</name>
+                    <type>EXTERNAL</type>
+                    <key>vpn_connection_monitor.py[&quot;{$AZ_SUBSCRIPTION}&quot;,&quot;{$AZ_RG}&quot;,&quot;{$AZ_VPN_CONNECTION}&quot;]</key>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>Executes the Python script and retrieves complete VPN connection data in JSON format</description>
+                </item>
+            </items>
+            <macros>
+                <macro>
+                    <macro>{$AZ_RG}</macro>
+                </macro>
+                <macro>
+                    <macro>{$AZ_SUBSCRIPTION}</macro>
+                </macro>
+                <macro>
+                    <macro>{$AZ_VPN_CONNECTION}</macro>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>
